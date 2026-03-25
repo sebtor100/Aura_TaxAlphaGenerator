@@ -4,11 +4,25 @@
 
 This repository features two distinct accounting engines, engineered to comply with the specific regulatory nuances of the US and Canadian tax codes.
 
-## 🏛 The Quantitative Philosophy
-Traditional ETFs are tax-inefficient for high-net-worth clients because they do not allow for the harvesting of individual security losses. Aura solves this by using **Constrained Quadratic Programming (QP)** to maintain market exposure while actively trading for tax efficiency.
+## 🧠 The Quantitative Core
 
-**Objective Function:**
-$$ \min_{w} \left( \text{TrackingError}(w, w_b) + \lambda_{TC} \cdot \text{Turnover} - \lambda_{Tax} \cdot \text{HarvestedLosses} \right) $$
+Aura formulates portfolio construction as a constrained Quadratic Programming (QP) problem. The objective function dynamically balances three competing forces:
+
+**Minimize:**
+`[Tracking Error Variance] + [Turnover Penalty] - [Tax-Loss Harvesting Benefit]`
+
+**Mathematical Formulation:**
+
+Minimize:
+`(w - wb)ᵀ Σ (w - wb) + λ_TC * ||w - w₀||₁ - λ_Tax * (Uᵀ Δw)`
+
+*Subject to:*
+- **Fully Invested:** Σ w = 1
+- **Long-Only:** w ≥ 0
+- **Tracking Error Constraint:** |w - wb| ≤ 0.05
+- **Regulatory Wash-Sale Constraint:** wᵢ ≤ w₀ᵢ (if locked)
+
+*(Where w is the weight vector, Σ is the covariance matrix, U is the vector of unrealized losses, and λ are penalty coefficients.)*
 
 ## ⚖️ Regulatory Accounting Engines
 
